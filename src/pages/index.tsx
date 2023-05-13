@@ -4,15 +4,13 @@ import { Button } from "@nextui-org/react";
 export default function Home() {
   const handleOhuro = async (s: string) => {
     try {
-      const res = await fetch("api/switch", {
+      await fetch("api/huro", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ command: s }),
       });
-      const data = await res.json();
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
