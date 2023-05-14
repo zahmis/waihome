@@ -1,7 +1,7 @@
 "use client";
 import { Button, Textarea, Badge, Grid } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { GetHuroStatusResponse } from "./types";
+import { GetHuroStatusResponse } from "./api/types";
 
 export default function Home() {
   const [login, setLogin] = useState(false);

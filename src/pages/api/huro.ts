@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { CommonResponse, GetHuroStatusResponse } from "../types";
+import { CommonResponse, GetHuroStatusResponse } from "./types";
 
 const TOKEN = process.env.NEXT_PUBLIC_TOKEN;
 const SECRET = process.env.NEXT_PUBLIC_SECRET;
