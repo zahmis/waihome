@@ -7,6 +7,20 @@ export default function Home() {
   const [login, setLogin] = useState(false);
   const [password, setPassword] = useState("");
   const [huroStatus, setHuroStatus] = useState(false);
+  const [lightsStatus, setLightsStatus] = useState(false);
+
+  // 新しくデバイスを追加するときはここでdeviceIdを確認する
+  // const getList = async () => {
+  //   try {
+  //     const res = await fetch("api/deviceList");
+  //     const data = await res.json();
+  //     console.log(data);
+  //   } catch (err) {
+  //     if (err instanceof Error)
+  //       throw new Error(`リスト取得 Error: ${err.message}`);
+  //   }
+  // };
+  // getList();
 
   const handleOhuro = async (s: string) => {
     try {
@@ -36,6 +50,40 @@ export default function Home() {
     } catch (err) {
       if (err instanceof Error)
         throw new Error(`風呂状態 Error: ${err.message}`);
+    }
+  };
+
+  const handleLights = async (s: string) => {
+    try {
+      await fetch("api/lights", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ command: s }),
+      });
+
+      // 割と反映に時間かかるので5秒待つ
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      getLightsStatus();
+    } catch (err) {
+      if (err instanceof Error)
+        throw new Error(`照明スイッチ Error: ${err.message}`);
+    }
+  };
+
+  const getLightsStatus = async () => {
+    try {
+      const res = await fetch("api/lights");
+      const data = await res.json();
+
+      if (data === "on") setLightsStatus(true);
+      else setLightsStatus(false);
+
+      console.log(data);
+    } catch (err) {
+      if (err instanceof Error)
+        throw new Error(`照明状態 Error: ${err.message}`);
     }
   };
 
@@ -88,6 +136,19 @@ export default function Home() {
         </Grid>
         <Badge color={huroStatus ? "error" : "primary"}>
           {huroStatus ? "ON" : "OFF"}
+        </Badge>
+      </Grid.Container>
+      <Grid.Container gap={1}>
+        <Grid>
+          <Button color="error" onClick={() => handleLights("turnOn")}>
+            照明 ON
+          </Button>
+        </Grid>
+        <Grid>
+          <Button onClick={() => handleLights("turnOff")}>照明 OFF</Button>
+        </Grid>
+        <Badge color={lightsStatus ? "error" : "primary"}>
+          {lightsStatus ? "ON" : "OFF"}
         </Badge>
       </Grid.Container>
     </main>
