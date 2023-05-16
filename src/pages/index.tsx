@@ -2,7 +2,7 @@
 import { Button, Textarea, Badge, Grid } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { GetHuroStatusResponse } from "./api/types";
-
+s;
 export default function Home() {
   const [login, setLogin] = useState(false);
   const [password, setPassword] = useState("");
@@ -21,6 +21,32 @@ export default function Home() {
   //   }
   // };
   // getList();
+
+  type User = {
+    name: string;
+    email: string;
+  };
+
+  const token = "xCdVYW3MBf%8!*@zamis";
+
+  const getWaiHouseApi = async (user: User) => {
+    try {
+      const res = await fetch("http://192.168.0.27:3000/isLogin", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+      const data = await res.json();
+      console.log(data);
+      return data;
+    } catch (err) {
+      if (err instanceof Error)
+        throw new Error(`WaiHouse Error: ${err.message}`);
+    }
+  };
 
   const handleOhuro = async (s: string) => {
     try {
@@ -112,7 +138,12 @@ export default function Home() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button
-          onPress={() => {
+          onPress={async () => {
+            const res = await getWaiHouseApi({
+              name: "zamis",
+              email: "waimatu@hoge.com",
+            });
+
             if (password === "xCdVYW3MBf%8!*@zamis") setLogin(true);
           }}
         >
