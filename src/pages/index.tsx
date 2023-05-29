@@ -3,7 +3,7 @@ import { Button, Textarea, Badge, Grid } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { GetHuroStatusResponse } from "./api/types";
-import { Counter } from "./function/counter";
+// import { Counter } from "./function/counter";
 import { useDeviceList } from "./api/deviceList";
 export default function Home() {
   const [login, setLogin] = useState(false);
