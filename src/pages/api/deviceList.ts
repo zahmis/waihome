@@ -1,33 +1,23 @@
-import axios from "axios";
-import { NextApiRequest, NextApiResponse } from "next";
+import useSWR from "swr";
 
-const TOKEN = process.env.NEXT_PUBLIC_TOKEN;
+export const useDeviceList = () => {
+  const fetcher = (url: string) =>
+    fetch(url, {
+      headers: {
+        Authorization: "Bearer " + process.env.NEXT_PUBLIC_TOKEN,
+      },
+    });
 
-const getList = async () => {
-  const response = await axios(`https://api.switch-bot.com/v1.0/devices`, {
-    headers: {
-      Authorization: TOKEN,
-    },
-  });
-  return response.data;
+  const { data, error } = useSWR(
+    "https://api.switch-bot.com/v1.0/devices",
+    fetcher
+  );
+
+  console.log(data, 16);
+
+  return {
+    data,
+    isLoading: !error && !data,
+    isError: error,
+  };
 };
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  try {
-    switch (req.method) {
-      case "GET":
-        const getData = await getList();
-        res.status(200).json(getData);
-        break;
-      default:
-        res.status(405).json({ error: "Method not allowed" });
-        return;
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-}

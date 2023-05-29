@@ -1,7 +1,10 @@
 "use client";
 import { Button, Textarea, Badge, Grid } from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { GetHuroStatusResponse } from "./api/types";
+import { Counter } from "./function/counter";
+import { useDeviceList } from "./api/deviceList";
 export default function Home() {
   const [login, setLogin] = useState(false);
   const [password, setPassword] = useState("");
@@ -9,31 +12,21 @@ export default function Home() {
   const [lightsStatus, setLightsStatus] = useState(false);
 
   // 新しくデバイスを追加するときはここでdeviceIdを確認する
-  // const getList = async () => {
-  //   try {
-  //     const res = await fetch("api/deviceList");
-  //     const data = await res.json();
-  //     console.log(data);
-  //   } catch (err) {
-  //     if (err instanceof Error)
-  //       throw new Error(`リスト取得 Error: ${err.message}`);
-  //   }
-  // };
-  // getList();
+  const { data } = useDeviceList();
+
+  console.log(data, 17);
 
   type User = {
     name: string;
     email: string;
   };
 
-  const token = "xCdVYW3MBf%8!*@zamis";
-
   const getWaiHouseApi = async (user: User) => {
     try {
       const res = await fetch("http://192.168.0.27:3000/isLogin", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${process.env.TOKEN}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(user),
